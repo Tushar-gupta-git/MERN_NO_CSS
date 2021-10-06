@@ -1,7 +1,9 @@
-
 import { useState } from "react";
 import "./App.css";
-
+import Addchat from "./components/Addchat";
+import Showchat from "./components/Showchat";
+import Showdet from "./components/Showdet";
+import Showrecip from "./components/Showrecip";
 
 function App() {
   return (
@@ -9,28 +11,13 @@ function App() {
       <div className="header">Tushar Chat app</div>
       <div className="container">
         <div className="c1">
-          <div className="addchat half">
-            addchat
-            <input type="text" />
-            <button > create new chat</button>
-
-
-          </div>
-          <div className="showrecip half">
-            showrecip
-
-          </div>
+          <Addchat className="half" />
+          <Showrecip className="half" />
         </div>
         <div className="c2">
-        <div className="showdet half">
-          showdet
+          <Showdet className="half" />
+          <Showchat className="half" />
         </div>
-        <div className="showchat half">
-          showchat
-        </div>
-        </div>
-
-        
       </div>
     </div>
   );
