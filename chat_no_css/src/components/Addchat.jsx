@@ -5,8 +5,6 @@ function Addchat({className}) {
     const addroom=()=>{
         console.log(room)
         setroom("")
-        
-  
     }
     return (
         <div className={className}>

@@ -4,8 +4,8 @@ import mongoose from "mongoose"
 // defining the way how the data will be stored or the manner how the data will be stored
 
 const chatschema = mongoose.Schema({
-    message:String,
     name:String,
+    message:String,
     time: String,
     recieved:Boolean
 

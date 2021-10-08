@@ -3,11 +3,11 @@ import express from "express";
 import mongoose from "mongoose";
 import Messages from "./chat_schema.js";
 import Pusher from "pusher";
-import Cors from "cors"
-
+import Cors from "cors";
+import dotenv from "dotenv"; // used dotenv storing mongo api ket in .env file "THAPA TECHNICAL: https://youtu.be/jxv53raRvRU "
 //app config
 const app = express();
-const port = 9000 || process.env.PORT;
+const port = process.env.PORT || 9000;
 
 //pusher
 const pusher = new Pusher({
@@ -17,9 +17,11 @@ const pusher = new Pusher({
   cluster: "mt1",
   useTLS: true,
 });
+// DOTENV FOR STORING MONGO PORT AND API
+dotenv.config({ path: "./password.env" });
 
 // db configure
-const connectionurl = `mongodb+srv://admin:Yj5aloiP5FJ3XL80@cluster0.nymdy.mongodb.net/ChatDB?retryWrites=true&w=majority`;
+const connectionurl = process.env.MONGOURL;
 mongoose.connect(connectionurl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -27,38 +29,40 @@ mongoose.connect(connectionurl, {
 
 // db connected and pusher updated
 const db = mongoose.connection;
-if(db){
-db.once("open", () => {
-  console.log("db connected");
-  const messagecollection = db.collection("chatcontents");
-  const change = messagecollection.watch();
-  change.on("change", (change) => {
-    console.log(change)
-    if(change.operationType=="insert"){
+if (db) {
+  db.once("open", () => {
+    console.log("db connected");
+    const messagecollection = db.collection("chatcontents");
+    const change = messagecollection.watch();
+    change.on("change", (change) => {
+      // console.log(change)
+      if (change.operationType == "insert") {
         const messagedetail = change.fullDocument;
-        pusher.trigger("messages" , "inserted",{
-            name:messagedetail.name,
-            message:messagedetail.message,
-            time : messagedetail.time 
-        })
-    }else{
-        console.log("error with pusher")
-    }
+        pusher.trigger("messages", "inserted", {
+          name: messagedetail.name,
+          message: messagedetail.message,
+          time: messagedetail.time,
+          recieved: messagedetail.recieved,
+        });
+        console.log("added to pusher");
+      } else {
+        console.log("error with pusher");
+      }
+    });
   });
-});
 }
 
-
-//middleware
+//middleware + CORS
 app.use(express.json());
-app.use(Cors())
+app.use(Cors());
 
 // api route
 
+//TEST API
 app.get("/", (req, res) => {
   res.status(200).send("hello world");
 });
-
+//MESSAGE ADD ROUTE
 app.post("/messages/add", (req, res) => {
   const dbmessage = req.body;
   // res.status(200).send(dbmessage)
@@ -70,6 +74,7 @@ app.post("/messages/add", (req, res) => {
     }
   });
 });
+//MESSAGE FETCH ROUTE
 app.get("/messages/show", (req, res) => {
   Messages.find((err, data) => {
     if (err) {
