@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import Addchat from "./components/Addchat";
+import Adduser from "./components/Adduser";
 import Showchat from "./components/Showchat";
 import Showdet from "./components/Showdet";
 import Showrecip from "./components/Showrecip";
@@ -32,13 +32,13 @@ function App() {
       }
     )
   },[])
-  console.log(messages)
+  // console.log(messages)
   return (
     <div className="App">
       <div className="header">Tushar Chat app</div>
       <div className="container">
         <div className="c1">
-          <Addchat className="all"/>
+          <Adduser className="all"/>
           <Showrecip className="all"/>
         </div>
         <div className="c1">

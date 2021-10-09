@@ -38,11 +38,13 @@ if (db) {
       // console.log(change)
       if (change.operationType == "insert") {
         const messagedetail = change.fullDocument;
+        console.log(messagedetail.id)
         pusher.trigger("messages", "inserted", {
           name: messagedetail.name,
           message: messagedetail.message,
           time: messagedetail.time,
           recieved: messagedetail.recieved,
+          id:messagedetail.id
         });
         console.log("added to pusher");
       } else {
@@ -84,6 +86,11 @@ app.get("/messages/show", (req, res) => {
     }
   });
 });
+
+app.post("/users",(res , req)=>{
+  
+
+})
 
 // api listener
 app.listen(port, () => console.log("listening on port 9000"));

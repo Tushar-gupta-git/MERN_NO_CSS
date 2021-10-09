@@ -8,8 +8,13 @@ const chatschema = mongoose.Schema({
     message:String,
     time: String,
     recieved:Boolean
-
 });
+
+const user = mongoose.Schema({
+    name:String,
+    id : String
+})
+
 const Messages =mongoose.model("chatcontent" , chatschema)
 //chatcontent is the document
 export default Messages
